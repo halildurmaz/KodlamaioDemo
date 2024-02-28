@@ -3,7 +3,9 @@ using Business.Abstract;
 using Business.Concrete;
 using DataAccess.Concrete;
 
-
+InstructorManager instructorManager = new InstructorManager(new InstructorDal());
+CategoryManager categoryManager = new CategoryManager(new CategoryDal());
+CourseManager courseManager = new CourseManager(new CourseDal());
 void DataSeeds()
 {
     Category category = new() { Id = 1, Name = "Mobil" };
@@ -43,23 +45,67 @@ void DataSeeds()
     //};
 
 
-    InstructorManager instructorManager = new InstructorManager(new InstructorDal());
+
     instructorManager.Add(instructor);
     instructorManager.Add(instructor2);
     instructorManager.Add(instructor3);
 
-    CategoryManager categoryManager = new CategoryManager(new CategoryDal());
+
     categoryManager.Add(category);
     categoryManager.Add(category1);
     categoryManager.Add(category2);
     categoryManager.Add(category3);
 
-    //CourseManager courseManager = new CourseManager(new CourseDal());
+
     //courseManager.Add(course);
     //courseManager.Add(course1);
     //courseManager.Add(course2);
 }
 
+void CourseAdd()
+{
+    string courseName;
+    int courseId, instructorId, categoryId;
+    Console.WriteLine("------------------ Kurs Ekle ------------------");
+    Console.Write("\nKurs Id: ");
+    courseId = Convert.ToInt32(Console.ReadLine());
+    Console.Write("\nKurs Adı: ");
+    courseName = Console.ReadLine();
+
+    var instructorList = instructorManager.GetAll();
+    foreach (var instructor in instructorList)
+    {
+        Console.WriteLine("Id: " + instructor.Id +" " + instructor.FirstName + " " + instructor.LastName); 
+    }
+    Console.Write("\nEğitmen Id: ");
+    instructorId = Convert.ToInt32(Console.ReadLine());
+    Console.Write("\nKategori Id: ");
+    categoryId = Convert.ToInt32(Console.ReadLine());
+
+    Course course = new();
+    course.Id = courseId;
+    course.Name = courseName;
+
+}
+void CourseUpdate()
+{
+
+}
+
+void CourseDelete()
+{
+
+}
+
+void CourseGetAll()
+{
+
+}
+
+void CourseGetById()
+{
+
+}
 void CourseOperation()
 {
     int choise;
@@ -74,19 +120,30 @@ void CourseOperation()
     switch (choise)
     {
         case 1:
-            
+            CourseAdd();
             break;
         case 2:
-            CategoryOperation();
+            CourseUpdate();
             break;
         case 3:
-            InstructorOperation();
+            CourseDelete();
+            break;
+        case 4:
+            CourseGetAll();
+            break;
+        case 5:
+            CourseGetById();
             break;
         default:
             break;
     }
 }
 
+
+void CategoryOperation()
+{
+
+}
 void MainPage()
 {
     int choise;
