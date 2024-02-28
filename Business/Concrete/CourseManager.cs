@@ -16,15 +16,19 @@ public class CourseManager : ICourseService
 {
     private readonly CourseBusinessRules _courseBusinessRules;
     private readonly ICourseDal _courseDal;
+    private readonly ICategoryDal _categoryDal;
+    private readonly IInstructorDal _instructorDal;
     public CourseManager(ICourseDal courseDal)
     {
         _courseDal = courseDal;
-        _courseBusinessRules = new CourseBusinessRules(_courseDal);
+        _categoryDal = new CategoryDal();
+        _instructorDal = new InstructorDal();
+        _courseBusinessRules = new CourseBusinessRules(_courseDal,_categoryDal,_instructorDal);
     }
     public Course Add(Course course)
     {
         _courseBusinessRules.CourseNameCanNotDuplicatedWhenInserted(course);
-        _courseBusinessRules.CategoryAndInstructorShouldBeExists(course);
+    
         return _courseDal.Add(course);
     }
 
@@ -54,7 +58,7 @@ public class CourseManager : ICourseService
         var deleteCourse = _courseDal.GetById(course.Id);
         _courseBusinessRules.CourseShouldBeExistsWhenSelected(deleteCourse);
         _courseBusinessRules.CourseNameCanNotDuplicatedWhenUpdated(course);
-        _courseBusinessRules.CategoryAndInstructorShouldBeExists(course);
+       
         return _courseDal.Update(course, deleteCourse);
     }
 }

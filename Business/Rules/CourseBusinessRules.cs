@@ -10,12 +10,11 @@ public class CourseBusinessRules
     private readonly ICategoryDal _categoryDal;
     private readonly IInstructorDal _instructorDal;
 
-
-    public CourseBusinessRules(ICourseDal courseDal)
+    public CourseBusinessRules(ICourseDal courseDal, ICategoryDal categoryDal, IInstructorDal instructorDal)
     {
         _courseDal = courseDal;
-        _categoryDal = new CategoryDal();
-        _instructorDal = new InstructorDal();
+        _categoryDal = categoryDal;
+        _instructorDal = instructorDal;
     }
 
     public void CourseNameCanNotDuplicatedWhenInserted(Course course)
@@ -41,21 +40,21 @@ public class CourseBusinessRules
         }
     }
 
-    public void CategoryAndInstructorShouldBeExists(Course course)
-    {
-        var categoryResult = _categoryDal.GetById(course.CategoryId);
-        var instructorResult = _instructorDal.GetById(course.InstructorId);
-        if (categoryResult == null && instructorResult == null)
-        {
-            throw new Exception("Category and Instructor not exists!");
-        }
-        else if (categoryResult == null)
-        {
-            throw new Exception("Category not exists!");
-        }
-        else if (instructorResult == null)
-        {
-            throw new Exception("Instructor not exists!");
-        }
-    }
+    //public void CategoryAndInstructorShouldBeExists(Course course)
+    //{
+    //    var categoryResult = _categoryDal.GetById(course.CategoryId);
+    //    var instructorResult = _instructorDal.GetById(course.InstructorId);
+    //    if (categoryResult == null && instructorResult == null)
+    //    {
+    //        throw new Exception("Category and Instructor not exists!");
+    //    }
+    //    else if (categoryResult == null)
+    //    {
+    //        throw new Exception("Category not exists!");
+    //    }
+    //    else if (instructorResult == null)
+    //    {
+    //        throw new Exception("Instructor not exists!");
+    //    }
+    //}
 }

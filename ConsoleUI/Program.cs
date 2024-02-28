@@ -62,49 +62,141 @@ void DataSeeds()
     //courseManager.Add(course2);
 }
 
+void RoutingHelper()
+{
+    Console.WriteLine("\n\nAna Menüye Yönlendiriliyor...");
+    Thread.Sleep(3000);
+    Console.Clear();
+    MainPage();
+}
 void CourseAdd()
 {
-    string courseName;
+    string courseName, courseDescription;
     int courseId, instructorId, categoryId;
     Console.WriteLine("------------------ Kurs Ekle ------------------");
     Console.Write("\nKurs Id: ");
     courseId = Convert.ToInt32(Console.ReadLine());
-    Console.Write("\nKurs Adı: ");
+    Console.Write("Kurs Adı: ");
     courseName = Console.ReadLine();
+    Console.Write("Kurs Açıklaması: ");
+    courseDescription = Console.ReadLine();
 
     var instructorList = instructorManager.GetAll();
+    Console.WriteLine("");
     foreach (var instructor in instructorList)
     {
-        Console.WriteLine("Id: " + instructor.Id +" " + instructor.FirstName + " " + instructor.LastName); 
+        Console.WriteLine("Id: " + instructor.Id + " " + instructor.FirstName + " " + instructor.LastName);
     }
     Console.Write("\nEğitmen Id: ");
     instructorId = Convert.ToInt32(Console.ReadLine());
+
+    var categoryList = categoryManager.GetAll();
+    Console.WriteLine("");
+    foreach (var category in categoryList)
+    {
+        Console.WriteLine("Id: " + category.Id + " " + category.Name);
+    }
     Console.Write("\nKategori Id: ");
     categoryId = Convert.ToInt32(Console.ReadLine());
 
     Course course = new();
     course.Id = courseId;
     course.Name = courseName;
+    course.CategoryId = categoryId;
+    course.InstructorId = instructorId;
+    course.Description = courseDescription;
 
+    courseManager.Add(course);
+    Console.WriteLine("\nKurs Ekleme Başarılı!");
+    RoutingHelper();
 }
 void CourseUpdate()
 {
+    string courseName, courseDescription;
+    int courseId, instructorId, categoryId;
+    Console.WriteLine("------------------ Kurs Güncelleme ------------------");
+    Console.Write("\nKurs Id: ");
+    courseId = Convert.ToInt32(Console.ReadLine());
+    Console.Write("\nKurs Adı: ");
+    courseName = Console.ReadLine();
+    Console.Write("Kurs Açıklaması: ");
+    courseDescription = Console.ReadLine();
+
+    var instructorList = instructorManager.GetAll();
+    Console.WriteLine("");
+    foreach (var instructor in instructorList)
+    {
+        Console.WriteLine("Id: " + instructor.Id + " " + instructor.FirstName + " " + instructor.LastName);
+    }
+    Console.Write("\nEğitmen Id: ");
+    instructorId = Convert.ToInt32(Console.ReadLine());
+
+    var categoryList = categoryManager.GetAll();
+    Console.WriteLine("");
+    foreach (var category in categoryList)
+    {
+        Console.WriteLine("Id: " + category.Id + " " + category.Name);
+    }
+    Console.Write("\nKategori Id: ");
+    categoryId = Convert.ToInt32(Console.ReadLine());
+
+    Course course = new();
+    course.Id = courseId;
+    course.Name = courseName;
+    course.CategoryId = categoryId;
+    course.InstructorId = instructorId;
+    course.Description = courseDescription;
+
+    courseManager.Update(course);
+    Console.WriteLine("Kurs Güncelleme Başarılı!");
+    RoutingHelper();
 
 }
 
 void CourseDelete()
 {
+    string courseName, courseDescription;
+    int courseId, instructorId, categoryId;
+    Console.WriteLine("------------------ Kurs Silme ------------------");
+    var courseList = courseManager.GetAll();
+    foreach (var item in courseList)
+    {
+        Console.WriteLine("Id: " + item.Id + "\nKurs: " + item.Name + "\nAçıklama: " + item.Description + "\nKategori Id: " + item.CategoryId + "\nEğitmen Id: " + item.InstructorId);
+    }
 
+    Console.Write("Kurs Id: ");
+    courseId = Convert.ToInt32(Console.ReadLine());
+
+    var course = courseManager.GetById(courseId);
+    courseManager.Delete(course);
+    Console.WriteLine("Kurs Silme İşlemi Başarılı!");
+    RoutingHelper();
 }
 
 void CourseGetAll()
 {
-
+    Console.WriteLine("------------------ Kurs Listeleme ------------------");
+    var courseList = courseManager.GetAll();
+    foreach (var course in courseList)
+    {
+        Console.WriteLine("Id: " + course.Id + "\nKurs: " + course.Name + "\nAçıklama: " + course.Description + "\nKategori Id: " + course.CategoryId + "\nEğitmen Id: " + course.InstructorId + "\n");
+    }
+    Console.WriteLine("\n\nAna sayfaya dönmek için herhangi bir tuşa basınız...");
+    Console.ReadLine();
+    RoutingHelper();
 }
 
 void CourseGetById()
 {
-
+    int courseId;
+    Console.WriteLine("------------------ Kurs Bulma ------------------");
+    Console.WriteLine("Kurs Id: ");
+    courseId = Convert.ToInt32(Console.ReadLine());
+    var course = courseManager.GetById(courseId);
+    Console.WriteLine("Id: " + course.Id + "\nKurs: " + course.Name + "\nAçıklama: " + course.Description + "\nKategori Id: " + course.CategoryId + "\nEğitmen Id: " + course.InstructorId);
+    Console.WriteLine("\n\nAna sayfaya dönmek için herhangi bir tuşa basınız...");
+    Console.ReadLine();
+    RoutingHelper();
 }
 void CourseOperation()
 {
@@ -140,9 +232,246 @@ void CourseOperation()
 }
 
 
+void InstructorOperation()
+{
+    int choise;
+    Console.WriteLine("------------------ Eğitmen İşlemleri ------------------");
+    Console.WriteLine("\n1-Eğitmen Ekle");
+    Console.WriteLine("2-Eğitmen Güncelle");
+    Console.WriteLine("3-Eğitmen Sil");
+    Console.WriteLine("4-Eğitmenleri Listele");
+    Console.WriteLine("5-Eğitmen Arama(ID)");
+    Console.Write("\nSeçiminiz: ");
+    choise = Convert.ToInt32(Console.ReadLine());
+    switch (choise)
+    {
+        case 1:
+            InstructorAdd();
+            break;
+        case 2:
+            InstructorUpdate();
+            break;
+        case 3:
+            InstructorDelete();
+            break;
+        case 4:
+            InstructorGetAll();
+            break;
+        case 5:
+            InstructorGetById();
+            break;
+        default:
+            break;
+    }
+}
+
+void InstructorAdd()
+{
+    string firstName, lastName; int id, identityNumber;
+    Console.WriteLine("------------------ Eğitmen Ekle ------------------");
+
+    Console.Write("Eğitmen Id: ");
+    id = Convert.ToInt32(Console.ReadLine());
+    Console.Write("Eğitmen Tc: ");
+    identityNumber = Convert.ToInt32(Console.ReadLine());
+    Console.Write("Eğitmen Adı: ");
+    firstName = Console.ReadLine();
+    Console.Write("Eğitmen Soyadı: ");
+    lastName = Console.ReadLine();
+
+    Instructor instructor = new Instructor() { Id = id, IdentityNumber = identityNumber, FirstName = firstName, LastName = lastName };
+
+    instructorManager.Add(instructor);
+    Console.WriteLine("\nEğitmen başarıyla eklendi !");
+    RoutingHelper();
+
+
+}
+void InstructorUpdate()
+{
+    string firstName, lastName; 
+    int id, identityNumber;
+
+    Console.WriteLine("------------------ Eğitmen Güncelle ------------------");
+    Console.Write("Eğitmen Id: ");
+    id = Convert.ToInt32(Console.ReadLine());
+    Console.Write("Eğitmen Tc: ");
+    identityNumber = Convert.ToInt32(Console.ReadLine());
+    Console.Write("Eğitmen Adı: ");
+    firstName = Console.ReadLine();
+    Console.Write("Eğitmen Soyadı: ");
+    lastName = Console.ReadLine();
+
+    Instructor instructor = new Instructor() { Id = id, IdentityNumber = identityNumber, FirstName = firstName, LastName = lastName };
+
+    instructorManager.Update(instructor);
+    Console.WriteLine("Eğitmen başarıyla güncellendi !");
+    RoutingHelper();
+}
+
+void InstructorDelete()
+{
+    int id;
+
+    Console.WriteLine("------------------ Eğitmen Sil ------------------");
+
+    Console.Write("\nKategori Id: ");
+    id = Convert.ToInt32(Console.ReadLine());
+
+    var result = instructorManager.GetById(id);
+
+    instructorManager.Delete(result);
+    Console.WriteLine("Eğitmen başarıyla silindi !");
+    RoutingHelper();
+}
+
+void InstructorGetAll()
+{
+    var result = instructorManager.GetAll();
+    foreach (var item in result)
+    {
+        Console.WriteLine("Id: " + item.Id + "\nEğitmen Adı: " + item.FirstName+ " " + item.LastName + "\nEğitmen TC: " + item.IdentityNumber + "\n");
+    }
+    Console.WriteLine("\n\nAna sayfaya dönmek için herhangi bir tuşa basınız...");
+    Console.ReadLine();
+    RoutingHelper();
+
+}
+
+void InstructorGetById()
+{
+    int id;
+    Console.Write("\nEğitmen Id: ");
+    id = Convert.ToInt32(Console.ReadLine());
+
+    var result = instructorManager.GetById(id);
+
+    Console.WriteLine("Id: " + result.Id + "\nEğitmen Adı: " + result.FirstName + " " + result.LastName + "\nEğitmen TC: " + result.IdentityNumber + "\n");
+
+    Console.WriteLine("\n\nAna sayfaya dönmek için herhangi bir tuşa basınız...");
+    Console.ReadLine();
+    RoutingHelper();
+}
+
+
+
+
+
+
+
 void CategoryOperation()
 {
+    int choise;
+    Console.WriteLine("------------------ Kategori İşlemleri ------------------");
+    Console.WriteLine("\n1-Kategori  Ekle");
+    Console.WriteLine("2-Kategori  Güncelle");
+    Console.WriteLine("3-Kategori  Sil");
+    Console.WriteLine("4-Kategorileri  Listele");
+    Console.WriteLine("5-Kategori  Arama(ID)");
+    Console.Write("\nSeçiminiz: ");
+    choise = Convert.ToInt32(Console.ReadLine());
+    switch (choise)
+    {
+        case 1:
+            CategoryAdd();
+            break;
+        case 2:
+            CategoryUpdate();
+            break;
+        case 3:
+            CategoryDelete();
+            break;
+        case 4:
+            CategoryGetAll();
+            break;
+        case 5:
+            CategoryGetById();
+            break;
+        default:
+            break;
+    }
+}
 
+void CategoryAdd()
+{
+    string name; int id;
+    Console.WriteLine("------------------ Kategori Ekle ------------------");
+
+    Console.Write("Kategori Id: ");
+    id = Convert.ToInt32(Console.ReadLine());
+    Console.Write("Kategori Adı: ");
+    name = Console.ReadLine();
+
+    Category category = new Category() { Id = id, Name = name };
+
+    categoryManager.Add(category);
+    Console.WriteLine("Kategori başarıyla eklendi !");
+    RoutingHelper();
+
+}
+void CategoryUpdate()
+{
+    string name; int id;
+
+    Console.WriteLine("------------------ Kategori Güncelle ------------------");
+    Console.Write("\nKategori Id: ");
+    id = Convert.ToInt32(Console.ReadLine());
+    Console.Write("\nKategori Adı: ");
+    name = Console.ReadLine();
+
+    Category category = new Category() { Id = id, Name = name };
+
+    categoryManager.Update(category);
+    Console.WriteLine("Kategori başarıyla güncellendi !");
+    RoutingHelper();
+
+}
+
+void CategoryDelete()
+{
+    int id;
+
+    Console.WriteLine("------------------ Kategori Sil ------------------");
+
+    Console.Write("\nKategori Id: ");
+    id = Convert.ToInt32(Console.ReadLine());
+
+    var result = categoryManager.GetById(id);
+
+    Category category = new Category() { Id = id, Name = result.Name };
+
+    categoryManager.Delete(category);
+    Console.WriteLine("Kategori başarıyla silindi !");
+    RoutingHelper();
+
+}
+
+void CategoryGetAll()
+{
+    var result = categoryManager.GetAll();
+    foreach (var item in result)
+    {
+        Console.WriteLine($"Id: {item.Id} Name: {item.Name} ");
+    }
+    Console.WriteLine("\n\nAna sayfaya dönmek için herhangi bir tuşa basınız...");
+    Console.ReadLine();
+    RoutingHelper();
+
+}
+
+void CategoryGetById()
+{
+    int id;
+    Console.Write("\nKategori Id: ");
+    id = Convert.ToInt32(Console.ReadLine());
+
+    var result = categoryManager.GetById(id);
+
+    Console.WriteLine($"Id: {result.Id} Name: {result.Name} ");
+
+    Console.WriteLine("\n\nAna sayfaya dönmek için herhangi bir tuşa basınız...");
+    Console.ReadLine();
+    RoutingHelper();
 }
 void MainPage()
 {
